@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Ramayana War Archive</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-accent">⌘</span> Ramayana Archive
+        </a>
+        <ul class="nav-links">
+            <li><a href="characters.html">Characters</a></li>
+            <li><a href="duels.html">Duels</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><a href="#" id="darkModeToggle" style="font-size: 1.2rem; text-decoration: none;">🌙</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1 class="section-title">Archive Administration</h1>
+        
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
+            <!-- Character Admin Form -->
+            <div class="admin-section">
+                <div class="admin-header">
+                    <h2 id="charFormTitle">Add Character</h2>
+                </div>
+                <form id="characterForm" data-mode="add" data-id="">
+                    <div class="form-group">
+                        <label for="charName">Character Name *</label>
+                        <input type="text" id="charName" class="form-control" required placeholder="e.g., Hanuman">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="charDesc">Description</label>
+                        <textarea id="charDesc" class="form-control" placeholder="Short description of the character..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Character Image</label>
+                        <div class="upload-area" id="charUploadArea">
+                            <div class="upload-icon">📷</div>
+                            <div class="upload-text">Click or drag image here</div>
+                            <div class="upload-subtext">JPEG, PNG, WEBP (Max 10MB)</div>
+                            <input type="file" id="charImage" class="file-input" accept="image/*">
+                        </div>
+                        <div id="charImagePreview" class="image-preview">
+                            <img src="" alt="Preview" id="charImgElement">
+                            <span class="preview-clear" id="charClearPreview">Clear Image</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="charSubmitBtn" class="btn btn-primary" style="width: 100%">Save Character</button>
+                    <button type="button" id="charCancelBtn" class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem; display: none;">Cancel Edit</button>
+                </form>
+            </div>
+
+            <!-- Duel Admin Form -->
+            <div class="admin-section">
+                <div class="admin-header">
+                    <h2 id="duelFormTitle">Add Duel</h2>
+                </div>
+                <form id="duelForm" data-mode="add" data-id="">
+                    <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label for="duelDay">Day of War</label>
+                            <input type="number" id="duelDay" class="form-control" min="1" value="1" required>
+                        </div>
+                        <div>
+                            <label for="duelOrder">Order Index (within day)</label>
+                            <input type="number" id="duelOrder" class="form-control" min="0" value="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Rama Army</label>
+                        <div class="custom-select" id="ramaSelect">
+                            <div class="select-box" onclick="this.parentElement.classList.toggle('active')"><span id="ramaSelectText">Select characters...</span></div>
+                            <div class="select-options">
+                                <div class="dropdown-search">
+                                    <input type="text" placeholder="Search..." onkeyup="filterDropdown(this, 'ramaOptions')">
+                                </div>
+                                <div id="ramaOptions" class="dropdown-options-list">
+                                    <!-- Checkboxes populated via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ravana Army</label>
+                        <div class="custom-select" id="ravanaSelect">
+                            <div class="select-box" onclick="this.parentElement.classList.toggle('active')"><span id="ravanaSelectText">Select characters...</span></div>
+                            <div class="select-options">
+                                <div class="dropdown-search">
+                                    <input type="text" placeholder="Search..." onkeyup="filterDropdown(this, 'ravanaOptions')">
+                                </div>
+                                <div id="ravanaOptions" class="dropdown-options-list">
+                                    <!-- Checkboxes populated via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="duelDesc">Duel Description</label>
+                        <textarea id="duelDesc" class="form-control" placeholder="Describe the confrontation..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Duel Image (Optional)</label>
+                        <div class="upload-area" id="duelUploadArea">
+                            <div class="upload-icon">🖼️</div>
+                            <div class="upload-text">Click or drag image here</div>
+                            <div class="upload-subtext">JPEG, PNG, WEBP (Max 10MB)</div>
+                            <input type="file" id="duelImage" class="file-input" accept="image/*">
+                        </div>
+                        <div id="duelImagePreview" class="image-preview">
+                            <img src="" alt="Preview" id="duelImgElement">
+                            <span class="preview-clear" id="duelClearPreview">Clear Image</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="duelSubmitBtn" class="btn btn-secondary" style="width: 100%">Save Duel</button>
+                    <button type="button" id="duelCancelBtn" class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem; display: none;">Cancel Edit</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Management Sections -->
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
+            <!-- Manage Characters -->
+            <div class="admin-section">
+                <div class="admin-header">
+                    <h2>Manage Characters</h2>
+                </div>
+                <div id="manageCharactersLoader" class="loader-container">
+                    <div class="loader"></div>
+                </div>
+                <ul id="manageCharactersList" class="admin-list">
+                    <!-- Populated via JS -->
+                </ul>
+            </div>
+
+            <!-- Manage Duels -->
+            <div class="admin-section">
+                <div class="admin-header">
+                    <h2>Manage Duels</h2>
+                </div>
+                <div id="manageDuelsLoader" class="loader-container">
+                    <div class="loader"></div>
+                </div>
+                <ul id="manageDuelsList" class="admin-list">
+                    <!-- Populated via JS -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <button id="scrollTopBtn" class="scroll-btn scroll-top" title="Go to top">↑</button>
+    <button id="scrollBottomBtn" class="scroll-btn scroll-bottom visible" title="Go to bottom">↓</button>
+
+    <footer>
+        <p>&copy; 2026 Ramayana War Archive. Documenting the ancient epic.</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
